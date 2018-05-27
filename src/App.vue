@@ -1,15 +1,19 @@
 <template>
   <div id="app">
-    hello world
+    <m-header></m-header>
   </div>
 </template>
 
 <script>
+import MHeader from 'components/m-header/m-header.vue'
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    MHeader
+  }
 }
 </script>
 
-<style>
+<style lang="stylus" scoped>
 
 </style>
