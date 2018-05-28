@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <m-header></m-header>
-    <m-tab></m-tab>
+    <home-header></home-header>
+    <home-tab></home-tab>
     <keep-alive>
       <router-view></router-view>
     </keep-alive>
@@ -9,13 +9,13 @@
 </template>
 
 <script>
-import MHeader from 'components/m-header/m-header.vue'
-import MTab from 'components/tab/tab.vue'
+import HomeHeader from 'components/home-header/home-header.vue'
+import HomeTab from 'components/home-tab/home-tab.vue'
 export default {
   name: 'App',
   components: {
-    MHeader,
-    MTab
+    HomeHeader,
+    HomeTab
   }
 }
 </script>
