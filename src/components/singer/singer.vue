@@ -1,6 +1,7 @@
 <template>
   <div class="singer">
-    <list-view :data="singers"></list-view>
+    <list-view :data="singers" @selectSinger="showDetail"></list-view>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -29,7 +30,6 @@ export default {
         }
       })
     },
-
     _normalizeSinger(list) {
       let map = {
         hot: {
@@ -41,7 +41,7 @@ export default {
       list.forEach((item, index) => {
         if (index < HOT_SINGER_LEN) {
           map.hot.items.push({
-            id: item.singer_id,
+            id: item.singer_mid,
             name: item.singer_name,
             avatar: item.singer_pic
           })
@@ -54,7 +54,7 @@ export default {
           }
         }
         map[key].items.push({
-          id: item.singer_id,
+          id: item.singer_mid,
           name: item.singer_name,
           avatar: item.singer_pic
         })
@@ -72,8 +72,10 @@ export default {
       }
       return arr.concat(other)
     },
-    change(index) {
-      this.curIndex = index
+    showDetail(singer) {
+      this.$router.push({
+        path: `/singer/${singer.id}`
+      })
     }
   },
   components: {

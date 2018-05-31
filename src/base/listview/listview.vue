@@ -4,7 +4,11 @@
       <li class="list-group" v-for="group in data" :key="group.title" :ref="group.title">
         <h2 class="list-group-title">{{ group.title }}</h2>
         <ul>
-          <li v-for="item in group.items" class="list-group-item" :key="item.name">
+          <li class="list-group-item"
+            v-for="item in group.items"
+            :key="item.id"
+            @click="selectItem(item)"
+          >
             <img class="avatar" v-lazy="item.avatar">
             <span class="name">{{ item.name }}</span>
           </li>
@@ -24,6 +28,16 @@ export default {
   props: {
     data: {
       type: Array
+    }
+  },
+  data() {
+    return {
+      currentIndex: 0
+    }
+  },
+  methods: {
+    selectItem(item) {
+      this.$emit('selectSinger', item)
     }
   },
   components: {
