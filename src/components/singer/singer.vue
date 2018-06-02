@@ -9,6 +9,7 @@
 import ListView from 'base/listview/listview.vue'
 import { getSingerList } from 'api/singer.js'
 import { ERR_OK } from 'api/config.js'
+import Singer from 'common/js/singer-class.js'
 import {mapMutations} from 'vuex'
 
 const HOT_KEY = '热门'
@@ -27,7 +28,7 @@ export default {
     _getSingerList() {
       getSingerList().then(res => {
         if (res.code === ERR_OK) {
-          this.singers = this._normalizeSinger(res.singerList.data.singerlist)
+          this.singers = this._normalizeSinger(res.data.list)
         }
       })
     },
@@ -40,38 +41,43 @@ export default {
       }
 
       list.forEach((item, index) => {
+        // 数据前10条，定为热门数据
         if (index < HOT_SINGER_LEN) {
-          map.hot.items.push({
-            id: item.singer_mid,
-            name: item.singer_name,
-            avatar: item.singer_pic
-          })
+          map.hot.items.push(new Singer({
+            id: item.Fsinger_mid,
+            name: item.Fsinger_name
+          }))
         }
-        const key = item.country
+        // 为歌手按Findex分类
+        const key = item.Findex
         if (!map[key]) {
           map[key] = {
             title: key,
             items: []
           }
         }
-        map[key].items.push({
-          id: item.singer_mid,
-          name: item.singer_name,
-          avatar: item.singer_pic
-        })
+        map[key].items.push(new Singer({
+          id: item.Fsinger_mid,
+          name: item.Fsinger_name
+        }))
       })
-
-      let arr = []
-      let other = []
+      // 处理map，得到有序列表
+      let hot = []
+      let ret = []
       for (let key in map) {
-        if (key === '') {
-          map[key].title = '其他'
-          other.push(map[key])
-        } else {
-          arr.push(map[key])
+        let value = map[key]
+        // 判断每一项的title是字母还是'热门'，分别push进对应的数组
+        if (value.title.match(/[a-zA-Z]/)) {
+          ret.push(value)
+        } else if (value.title === HOT_KEY) {
+          hot.push(value)
         }
       }
-      return arr.concat(other)
+      // 为ret数组的项排序，为A-Z
+      ret.sort((a, b) => {
+        return a.title.charCodeAt(0) - b.title.charCodeAt(0)
+      })
+      return hot.concat(ret)
     },
     showDetail(singer) {
       this.$router.push({
