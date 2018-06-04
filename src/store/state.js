@@ -1,6 +1,7 @@
 const state = {
   singer: {},
-  disc: {}
+  disc: {},
+  toplist: {}
 }
 
 export default state

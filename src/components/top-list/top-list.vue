@@ -1,52 +1,51 @@
 <template>
   <transition name="slide">
-    <music-list :songs="songs" :title="discTitle" :bgImage="bgImage"></music-list>
+    <music-list  :songs="songs" :title="title" :bgImage="bgImage" :rank="rank"></music-list>
   </transition>
 </template>
 
 <script>
 import MusicList from 'components/music-list/music-list.vue'
-import {getDiscMusic} from 'api/recommend.js'
-import {getMusic} from 'api/singer.js'
-import { ERR_OK } from 'api/config.js'
+import {getMusicList} from 'api/rank.js'
 import {mapGetters} from 'vuex'
+import {ERR_OK} from 'api/config.js'
 import {createSong} from 'common/js/song.js'
-
+import {getMusic} from 'api/singer.js'
 export default {
   data() {
     return {
-      songs: []
+      songs: [],
+      rank: true
     }
   },
   computed: {
-    ...mapGetters(['disc']),
-    discTitle() {
-      return this.disc.dissname
+    ...mapGetters(['toplist']),
+    title() {
+      return this.toplist.topTitle
     },
     bgImage() {
-      return this.disc.imgurl
+      return this.toplist.picUrl
     }
   },
   created() {
-    setTimeout(() => {
-      this._getDiscMusic()
-    }, 1000)
+    this._getTopMusic()
   },
   methods: {
-    _getDiscMusic() {
-      getDiscMusic(this.disc.dissid).then((res) => {
-        if (!this.disc.dissid) {
-          this.$router.push('/recommend')
-          return
-        }
+    _getTopMusic() {
+      if (!this.toplist.id) {
+        this.$router.push('/rank')
+        return
+      }
+      getMusicList(this.toplist.id).then((res) => {
         if (res.code === ERR_OK) {
-          this.songs = this._normalizeSongData(res.cdlist[0].songlist)
+          this.songs = this._normalizeSongs(res.songlist)
         }
       })
     },
-    _normalizeSongData(list) {
+    _normalizeSongs(list) {
       let ret = []
-      list.forEach((musicData) => {
+      list.forEach((item) => {
+        const musicData = item.data
         if (musicData.songid && musicData.albummid) {
           getMusic(musicData.songmid).then((res) => {
             if (res.code === ERR_OK) {

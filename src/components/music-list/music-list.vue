@@ -21,7 +21,7 @@
       :data="songs" class="list" ref="list"
     >
       <div class="song-list-wrapper">
-        <song-list :songs="songs"></song-list>
+        <song-list :songs="songs" :rank="rank"></song-list>
       </div>
       <div v-show="!songs.length" class="loading-container">
         <base-loading></base-loading>
@@ -50,6 +50,10 @@ export default {
       default: function() {
         return []
       }
+    },
+    rank: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
