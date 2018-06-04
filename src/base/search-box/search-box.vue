@@ -27,6 +27,9 @@ export default {
   methods: {
     clear() {
       this.queryWord = ''
+    },
+    setQuery(query) {
+      this.queryWord = query
     }
   }
 }
