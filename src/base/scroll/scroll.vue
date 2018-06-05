@@ -21,6 +21,11 @@ export default {
       type: Boolean,
       default: false
     },
+    // 上拉刷新
+    pullup: {
+      type: Boolean,
+      default: false
+    },
     // 数据可能是动态改变的
     data: {
       type: Array,
@@ -46,6 +51,14 @@ export default {
         let me = this
         this.scroll.on('scroll', (pos) => {
           me.$emit('scroll', pos)
+        })
+      }
+      if (this.pullup) {
+        let me = this
+        this.scroll.on('scrollEnd', () => {
+          if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
+            me.$emit('scrollToEnd')
+          }
         })
       }
     },

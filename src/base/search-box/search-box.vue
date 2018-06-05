@@ -1,8 +1,8 @@
 <template>
   <div class="search-box">
     <i class="icon-search"></i>
-    <input type="text" class="box" v-model="queryWord" :placeholder="placeholder">
-    <i class="icon-dismiss" v-show="queryWord" @click="clear"></i>
+    <input type="text" class="box" v-model="query" :placeholder="placeholder">
+    <i class="icon-dismiss" v-show="query" @click="clear"></i>
   </div>
 </template>
 
@@ -16,7 +16,7 @@ export default {
   },
   data() {
     return {
-      queryWord: ''
+      query: ''
     }
   },
   created() {
@@ -26,10 +26,10 @@ export default {
   },
   methods: {
     clear() {
-      this.queryWord = ''
+      this.query = ''
     },
     setQuery(query) {
-      this.queryWord = query
+      this.query = query
     }
   }
 }

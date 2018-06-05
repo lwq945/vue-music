@@ -25,7 +25,7 @@ export function createSong(musicData, songVkey) {
 }
 
 // 歌手有多个
-function filterSinger(singer) {
+export function filterSinger(singer) {
   let ret = []
   if (!singer) {
     return

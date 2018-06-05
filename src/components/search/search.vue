@@ -1,9 +1,9 @@
 <template>
   <div class="search">
     <div class="search-box-wrapper">
-      <search-box ref="searchBox"></search-box>
+      <search-box ref="searchBox" @query="onQueryChange"></search-box>
     </div>
-    <div ref="shortcutWrapper" class="shortcut-wrapper">
+    <div ref="shortcutWrapper" class="shortcut-wrapper" v-show="!query">
       <div class="shortcut">
         <div>
           <div class="hot-key">
@@ -26,18 +26,23 @@
         </div>
       </div>
     </div>
+    <div class="search-result" v-show="query">
+      <suggest :query="query"></suggest>
+    </div>
   </div>
 </template>
 
 <script>
 import SearchBox from 'base/search-box/search-box.vue'
+import Suggest from 'components/suggest/suggest.vue'
 import {getHotkey} from 'api/search.js'
 import {ERR_OK} from 'api/config.js'
 
 export default {
   data() {
     return {
-      hotKeyList: []
+      hotKeyList: [],
+      query: ''
     }
   },
   created() {
@@ -53,10 +58,14 @@ export default {
     },
     addQuery(query) {
       this.$refs.searchBox.setQuery(query)
+    },
+    onQueryChange(query) {
+      this.query = query
     }
   },
   components: {
-    SearchBox
+    SearchBox,
+    Suggest
   }
 }
 </script>
@@ -94,4 +103,25 @@ export default {
             background: $color-highlight-background
             font-size: $font-size-medium
             color: $color-text-d
+        .search-history
+          position: relative
+          margin: 0 20px
+          .title
+            display: flex
+            align-items: center
+            height: 40px
+            font-size: $font-size-medium
+            color: $color-text-l
+            .text
+              flex: 1
+            .clear
+              extend-click()
+              .icon-clear
+                font-size: $font-size-medium
+                color: $color-text-d
+    .search-result
+      position: fixed
+      width: 100%
+      top: 178px
+      bottom: 0
 </style>
