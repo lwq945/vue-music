@@ -21,7 +21,7 @@
       :data="songs" class="list" ref="list"
     >
       <div class="song-list-wrapper">
-        <song-list :songs="songs" :rank="rank"></song-list>
+        <song-list :songs="songs" :rank="rank" @select="selectItem"></song-list>
       </div>
       <div v-show="!songs.length" class="loading-container">
         <base-loading></base-loading>
@@ -34,6 +34,8 @@
 import BaseScroll from 'base/scroll/scroll.vue'
 import SongList from 'base/song-list/song-list.vue'
 import BaseLoading from 'base/loading/loading'
+import {mapActions} from 'vuex'
+
 const RESERVED_HEIGHT = 40
 export default {
   props: {
@@ -76,6 +78,13 @@ export default {
     this.$refs.list.$el.style.top = `${this.imageHeight}px`
   },
   methods: {
+    selectItem(item, index) {
+      this.selectPlay({
+        list: this.songs,
+        index
+      })
+    },
+    ...mapActions(['selectPlay']),
     scroll(pos) {
       this.scrollY = pos.y
       // console.log('scrollY:' + this.scrollY)
